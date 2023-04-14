@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js')
+  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
+    
+  form.form-horizontal
+      input(type='hidden', name='_csrf', value=_csrf)
+      .offset-sm-2.col-sm-8
+      a.btn.btn-primary(href="/doc/list") List
+      .form-group.row.justify-content-md-center
+      .list-container
+        h1.text-center.mt-5 News Listings
+        .row#card-container 
+          for item in items
+            .col-md-4.mb-4(style='margin-bottom: 30px;') 
+              .card(style='max-height: 500px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); border: 1px solid rgba(0, 0, 0, 0.2);', draggable='true', ondragstart='drag(event)')
+                .card-header(style='background-image: linear-gradient(120deg, #1abc9c, #3498db);')
+                  h5.card-title(style='color: #fff;')= item.title 
+                .card-body(style='max-height: calc(100% - 100px); overflow-y: auto;') 
+                  p.card-text.font-weight-bold #{item.summary}
+                  p.card-text Content: #{item.rawContent}
+                  p.card-test id: #{item._id}
+                .card-footer.text-center
+                  div.btn-group
+                  a#view-source(href=(item.url.startsWith('http://') || item.url.startsWith('https://') ? item.url : 'http://' + item.url)).btn.btn-primary.btn-sm.mr-2 View Source
+                  button#mark-as-read.btn.btn-secondary.btn-sm(onclick='markDocAsRead(event, "#{item._id}")', data-id=item._id) Mark as Read
+                  script(src='/client/doc.js')

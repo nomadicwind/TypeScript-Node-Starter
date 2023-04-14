@@ -16,6 +16,7 @@ import * as homeController from "./controllers/home";
 import * as userController from "./controllers/user";
 import * as apiController from "./controllers/api";
 import * as contactController from "./controllers/contact";
+import * as docController from "./controllers/doc";
 
 // API keys and Passport configuration
 import * as passportConfig from "./config/passport";
@@ -94,6 +95,10 @@ app.post("/reset/:token", userController.postReset);
 app.get("/signup", userController.getSignup);
 app.post("/signup", userController.postSignup);
 app.get("/contact", contactController.getContact);
+app.get("/doc", docController.getDoc);
+app.post("/doc", docController.postDoc);
+app.get("/doc/list", docController.listDocs);
+app.patch("/doc/:id", docController.markAsRead);
 app.post("/contact", contactController.postContact);
 app.get("/account", passportConfig.isAuthenticated, userController.getAccount);
 app.post("/account/profile", passportConfig.isAuthenticated, userController.postUpdateProfile);

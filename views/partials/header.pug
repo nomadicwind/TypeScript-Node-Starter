@@ -15,6 +15,8 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light.fixed-top
           a.nav-link(href='/api') API Examples
         li.nav-item(class=(title === 'Contact') ? 'active' : undefined)
           a.nav-link(href='/contact') Contact
+        li.nav-item(class=(title === 'Doc') ? 'active' : undefined)
+          a.nav-link(href='/doc') Doc
       ul.nav.navbar-nav
         if !user
           li.nav-item(class=(title === 'Login') ? 'active' : undefined)

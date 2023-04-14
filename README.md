@@ -49,9 +49,9 @@ npm install
 - Configure your mongoDB server
 ```bash
 # create the db directory
-sudo mkdir -p /data/db
+sudo mkdir -p ~/data/db
 # give the db correct read/write permissions
-sudo chmod 777 /data/db
+sudo chmod 777 ~/data/db
 
 # starting from macOS 10.15 even the admin cannot create directory at root
 # so lets create the db directory under the home directory.
