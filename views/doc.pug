@@ -15,13 +15,14 @@ block content
         h1.text-center.mt-5 News Listings
         .row#card-container 
           for item in items
-            .col-md-4.mb-4(style='margin-bottom: 30px;') 
-              .card(style='max-height: 500px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); border: 1px solid rgba(0, 0, 0, 0.2);', draggable='true', ondragstart='drag(event)')
+            .col-12.mb-4(style='margin-bottom: 30px;') 
+              .card(style='max-height: 500px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); border: 1px solid rgba(0, 0, 0, 0.2);', ondragstart='drag(event)')
                 .card-header(style='background-image: linear-gradient(120deg, #1abc9c, #3498db);')
                   h5.card-title(style='color: #fff;')= item.title 
                 .card-body(style='max-height: calc(100% - 100px); overflow-y: auto;') 
                   p.card-text.font-weight-bold #{item.summary}
-                  p.card-text Content: #{item.rawContent}
+                  div.card-content 
+                    p!= item.rawContent
                   p.card-test id: #{item._id}
                 .card-footer.text-center
                   div.btn-group

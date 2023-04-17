@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from unidecode import unidecode
+import bleach
+import html
 
 # make a GET request to the Hacker News homepage
 r = requests.get('https://news.ycombinator.com/')
@@ -17,12 +19,11 @@ for i, link in enumerate(links):
     soup = BeautifulSoup(r.text, 'html.parser')
 
     # extract the content of the article and construct a RawDocument object
-    content = unidecode(soup.text)
+    content = soup.prettify()
     raw_document = {
         "title": titles[i],
-        # use first 200 characters of content as summary
         "summary": content[:200],
-        "rawContent": content,
+        "rawContent": bleach.clean(html.unescape(content)),
         "url": link['href']
     }
 
