@@ -1,3 +1,10 @@
+
+// Add this interface at the top of your doc.ts file
+interface Item {
+  rawContent: string;
+}
+
+
 async function markDocAsRead(event: Event, id: string): Promise<void> {
     // Your markDocAsRead logic
     event.preventDefault();
@@ -27,3 +34,10 @@ async function markDocAsRead(event: Event, id: string): Promise<void> {
     button.classList.add('disabled');
   }
   
+  // Add this new function
+function insertRawContent(items: Item[]): void {
+  const rawContents = items.map(item => item.rawContent);
+  $('.content-placeholder').each(function (index) {
+    $(this).html(rawContents[index]);
+  });
+}
