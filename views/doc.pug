@@ -2,7 +2,74 @@ extends layout
 
 block content
   link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css')
+  script.
+    function toggleCardBody(event) {
+      const cardBody = event.target.closest('.card-header').nextElementSibling;
+      cardBody.style.display = cardBody.style.display === 'none' ? 'block' : 'none';
+      event.target.closest('.card-header').classList.toggle('collapsed');
+    }  
+    function toggleMenu(event) {
+        event.preventDefault();
+        const submenu = event.target.nextElementSibling;
+        if submenu.style
+          submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+        else
+          alert('Clicked on: ' + event.target.innerText);
+    }
   style.
+    .content-wrapper {
+      display: flex;
+      max-width: 100%;  
+      margin: 0 auto;
+      box-sizing: border-box;       
+    }
+    .nav-panel {
+        width: 20%;
+        height: 100vh;
+        overflow-y: auto;
+        border-right: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f5f5f5;
+        font-family: 'Arial', sans-serif;
+        color: #333;
+        padding: 20px;
+      }
+    .tree {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .tree a {
+      text-decoration: none;
+      color: #333;
+      display: block;
+      padding: 0.5em 1em;
+      cursor: pointer;
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      font-weight: normal;
+      padding: 10px 0;
+      transition: background-color 0.3s;
+    }
+    .tree a:hover {
+      background-color: #e0e0e0;
+    }
+    .tree li {
+      border: none;
+      margin-bottom: 10px;
+    }
+    .tree li ul {
+      display: none;
+      padding-left: 1em;
+    }
+    .tree li ul li a {
+      font-size: 0.9rem;
+      padding-left: 20px; 
+    }
+
+    .main-content {
+      width: 80%;
+      padding: 10px;
+    }
     body {
       font-family: 'Arial', sans-serif;
       color: #333;
@@ -14,48 +81,87 @@ block content
     .card {
       border: 1px solid #ccc;
       border-radius: 5px;
-      box-shadow: none;
+      box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
       background-color: #fff;
+      padding: 10px;
     }
     .card-header {
       background-color: #f5f5f5;
       border-bottom: 1px solid #ccc;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      cursor: pointer;
+    }
+    .card-header.collapsed::after {
+      border-top: none;
+      border-bottom: 10px solid #333;
     }
     .card-body {
-      padding: 20px;
+      padding: 10px;
+      max-height: 400px;   
+      overflow-y: auto;    
+    }
+    .card-text.font-weight-x {
+    padding: 10px;
+    color: #3498db  ;
+    font-size: 14px;
     }
     .label-bubble {
       background-color: #3498db;
       border-radius: 5px;
-      padding: 4px 8px;
+      padding: 2px 6px;
       color: #fff;
       margin: 2px 5px;
       font-weight: normal;
-      font-size: 14px;
+      font-size: 12px;
     }
-
-  form.form-horizontal
-      input(type='hidden', name='_csrf', value=_csrf)
-      .offset-sm-2.col-sm-8
-      .form-group.row.justify-content-md-center
-      .list-container
-        h1.text-center.mt-5 News Listings
-        .row#card-container 
-          for item in items
-            .col-12.mb-4
-              .card
-                .card-header
-                  h5.card-title= item.title 
-                  if item.labels
-                    p !{item.labels.map(label => `<span class="label-bubble">${label}</span>`).join(' ')}
-
-                .card-body
-                  p.card-text.font-weight-bold !{item.summary.replace(/\n/g, '<br>')}
-                  p.card-text !{item.rawContent}
-                  p.card-test id: #{item._id}
-                .card-footer.text-center
-                  div.btn-group
-                  a#view-source(href=(item.url.startsWith('http://') || item.url.startsWith('https://') ? item.url : 'http://' + item.url)).btn.btn-primary.btn-sm.mr-2 View Source
-                  button#mark-as-read.btn.btn-secondary.btn-sm(onclick='markDocAsRead(event, "#{item._id}")', data-id=item._id) Mark as Read
-                  script(src='/client/doc.js')
+    style.
+    .btn {
+      padding: 4px 8px;  
+      font-size: 0.6rem;  
+    }
+    .btn-group {
+      padding: 0 10px;
+    }
+  .content-wrapper
+    .nav-panel
+        ul.tree
+          each node in navi
+            li
+              a(href=`/${node.title}`, onclick='toggleMenu(event)')
+                i.fas.fa-yin-yang.mr-2
+                = node.title
+              if node.children
+                ul
+                  each child in node.children
+                    li
+                      a(href=`/${child.title}`, onclick='toggleMenu(event)')
+                        i.fas.fa-wind-turbine.mr-2
+                        = child.title
+    .main-content
+      form.form-horizontal
+          input(type='hidden', name='_csrf', value=_csrf)
+          .col12
+          .form-group.row.justify-content-md-center
+          .list-container
+            .row#card-container 
+              for item in items
+                .col-12.mb-3
+                  .card
+                    .card-header(onclick='toggleCardBody(event)')
+                      .header-content
+                        h5.card-title= item.title 
+                        if item.labels
+                          p !{item.labels.map(label => `<span class="label-bubble">${label}</span>`).join(' ')}
+                      div.btn-group
+                        a#view-source(href=(item.url.startsWith('http://') || item.url.startsWith('https://') ? item.url : 'http://' + item.url)).btn.btn-primary.btn-sm.mr-2 View Source
+                        button#mark-as-read.btn.btn-secondary.btn-sm(onclick='markDocAsRead(event, "#{item._id}")', data-id=item._id) Mark as Read
+                    .card-body
+                      p.card-text.font-weight-x  !{item.summary.replace(/\n/g, '<br>')}
+                      p.card-text !{item.rawContent}
+                      p.card-test id: #{item._id}
+                      script(src='/client/doc.js')

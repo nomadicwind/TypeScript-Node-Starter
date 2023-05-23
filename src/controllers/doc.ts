@@ -57,6 +57,28 @@ export const postDoc = async (req: Request, res: Response, next: NextFunction) =
     });
 };
 
+const naviMenu = [
+  {
+    title: "All"
+  },
+  {
+    title: "by Source",
+    children: [
+      {title: "Hacker News"},
+      {title: "Feedly"},
+    ]
+  },
+  {
+    title:"by Type",
+    children:[
+      {title: "Tech"},
+      {title: "Biz"},
+    ]
+  },
+  {
+    title: "Bookmarked"
+  },
+];
 
 
 /**
@@ -68,7 +90,7 @@ export const listDocs = async(req: Request, res: Response) => {
         const items = await RawDocument.find().sort({createdAt : -1});
         
         console.log("aaa " + items);
-        res.render("doc",{items: items});
+        res.render("doc",{items: items, navi: naviMenu});
       } catch (err) {
         req.flash("errors", { msg: err });
       }
